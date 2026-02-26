@@ -505,22 +505,66 @@ function EventCard(props) {
   );
 }
 
+// ---------- EventFilterButtons ----------
+function EventFilterButtons(props) {
+  // Derive filter list from data so new event types appear automatically
+  var seenTypes = [];
+  var dynamicFilters = [{ value: "all", label: "All Events" }];
+  props.events.forEach(function(event) {
+    if (event.type && seenTypes.indexOf(event.type) === -1) {
+      seenTypes.push(event.type);
+      // Build a readable label from the type slug and use the event's own icon
+      var readableLabel = event.type
+        .split("-")
+        .map(function(word) { return word.charAt(0).toUpperCase() + word.slice(1); })
+        .join(" ");
+      dynamicFilters.push({ value: event.type, label: event.icon + " " + readableLabel });
+    }
+  });
+
+  return React.createElement("div", { className: "shop-controls" },
+    dynamicFilters.map(function(f) {
+      return React.createElement("button", {
+        key: f.value,
+        className: "filter-btn" + (props.activeFilter === f.value ? " active" : ""),
+        onClick: function() { props.onFilterChange(f.value); }
+      }, f.label);
+    })
+  );
+}
+
 // ---------- UpcomingEventsSection ----------
 function UpcomingEventsSection() {
+  var _React$useState = React.useState("all"),
+      activeFilter = _React$useState[0],
+      setActiveFilter = _React$useState[1];
+
+  // Guard against missing/invalid data
+  var events = Array.isArray(UPCOMING_EVENTS) ? UPCOMING_EVENTS : [];
+
+  var filteredEvents = events.filter(function(event) {
+    return activeFilter === "all" || event.type === activeFilter;
+  });
+
   return React.createElement("section", { className: "section section-events" },
     React.createElement("div", { className: "container" },
       React.createElement("h2", { className: "section-title" }, "Upcoming Events"),
       React.createElement("p", { className: "section-subtitle" }, "Join us for literary events and author conversations"),
-      UPCOMING_EVENTS && UPCOMING_EVENTS.length > 0
+      React.createElement(EventFilterButtons, {
+        events: events,
+        activeFilter: activeFilter,
+        onFilterChange: setActiveFilter
+      }),
+      filteredEvents.length > 0
         ? React.createElement("div", { className: "events-grid" },
-            UPCOMING_EVENTS.map(function(event) {
+            filteredEvents.map(function(event) {
               return React.createElement(EventCard, {
                 key: event.id,
                 event: event
               });
             })
           )
-        : React.createElement("p", { className: "no-events" }, "No upcoming events at this time. Check back soon!")
+        : React.createElement("p", { className: "no-events" }, "No upcoming events in this category. Check back soon!")
     )
   );
 }
