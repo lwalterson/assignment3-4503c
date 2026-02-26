@@ -37,6 +37,12 @@ var FEATURES = [
   { icon: "\u{1F4AC}", title: "Reader Support", desc: "Have a question? Our friendly team is here to help you find the perfect book." }
 ];
 
+var UPCOMING_EVENTS = [
+  { id: 1, type: "book-club", icon: "📚", title: "Classic Literature Book Club", date: "2026-03-15", time: "19:00", location: "Portland, OR", isVirtual: false, description: "Join us for a deep dive into the themes and characters of Pride and Prejudice. All readers welcome!" },
+  { id: 2, type: "author-event", icon: "✍️", title: "Local Author Q&A: Sarah Chen", date: "2026-03-22", time: "18:30", location: "Online (Zoom)", isVirtual: true, description: "Meet debut novelist Sarah Chen as she discusses her award-winning novel and the writing process behind it." },
+  { id: 3, type: "live-event", icon: "🎤", title: "Poetry Slam & Open Mic Night", date: "2026-04-05", time: "20:00", location: "Portland, OR", isVirtual: false, description: "Celebrate the written word with live poetry, original works, and an open mic for emerging poets." }
+];
+
 var VALUES = [
   { icon: "\u270D\uFE0F", title: "Thoughtful Curation", desc: "We read before we recommend. Every book on our shelves has earned its place through literary merit and reader impact." },
   { icon: "\u{1F30E}", title: "Sustainability", desc: "We use recycled packaging and partner with eco-conscious publishers to reduce our environmental footprint." },
