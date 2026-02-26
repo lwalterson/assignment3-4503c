@@ -476,6 +476,55 @@ function FeaturesSection() {
   );
 }
 
+// ---------- EventCard ----------
+function EventCard(props) {
+  var event = props.event;
+
+  // Format date for display (e.g., "March 15, 2026")
+  function formatDate(dateStr) {
+    var date = new Date(dateStr + "T00:00:00Z");
+    var options = { year: "numeric", month: "long", day: "numeric" };
+    return date.toLocaleDateString("en-US", options);
+  }
+
+  return React.createElement("div", { className: "event-card" },
+    React.createElement("div", { className: "event-icon" }, event.icon || "📅"),
+    React.createElement("div", { className: "event-details" },
+      React.createElement("h3", { className: "event-title" }, event.title || "Untitled Event"),
+      React.createElement("p", { className: "event-type" }, event.type || "Event"),
+      React.createElement("div", { className: "event-meta" },
+        React.createElement("time", { dateTime: event.date, className: "event-date" }, formatDate(event.date || "")),
+        React.createElement("span", { className: "event-time" }, event.time || "Time TBD")
+      ),
+      React.createElement("p", { className: "event-location" },
+        event.isVirtual ? "🌐 " : "📍 ",
+        event.location || "Location TBD"
+      ),
+      React.createElement("p", { className: "event-description" }, event.description || "")
+    )
+  );
+}
+
+// ---------- UpcomingEventsSection ----------
+function UpcomingEventsSection() {
+  return React.createElement("section", { className: "section section-events" },
+    React.createElement("div", { className: "container" },
+      React.createElement("h2", { className: "section-title" }, "Upcoming Events"),
+      React.createElement("p", { className: "section-subtitle" }, "Join us for literary events and author conversations"),
+      UPCOMING_EVENTS && UPCOMING_EVENTS.length > 0
+        ? React.createElement("div", { className: "events-grid" },
+            UPCOMING_EVENTS.map(function(event) {
+              return React.createElement(EventCard, {
+                key: event.id,
+                event: event
+              });
+            })
+          )
+        : React.createElement("p", { className: "no-events" }, "No upcoming events at this time. Check back soon!")
+    )
+  );
+}
+
 // ---------- ValueCard ----------
 function ValueCard(props) {
   return React.createElement("div", { className: "value-card" },
@@ -957,6 +1006,7 @@ function HomePage() {
       )
     ),
     React.createElement(FeaturesSection, null),
+    React.createElement(UpcomingEventsSection, null),
     React.createElement(BookModal, {
       isOpen: modalOpen,
       book: selectedBook,
